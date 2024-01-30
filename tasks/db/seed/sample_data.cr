@@ -8,23 +8,16 @@ class Db::Seed::SampleData < LuckyTask::Task
   summary "Add sample database records helpful for development"
 
   def call
-    # Using an Avram::Factory:
-    #
-    # Use the defaults, but override just the email
-    # UserFactory.create &.email("me@example.com")
+    10.times do
+      user = UserQuery.new.email("cippaciong@cakeboss.it").first
 
-    # Using a SaveOperation:
-    # ```
-    # SignUpUser.create!(email: "me@example.com", password: "test123", password_confirmation: "test123")
-    # ```
-    #
-    # You likely want to be able to run this file more than once. To do that,
-    # only create the record if it doesn't exist yet:
-    # ```
-    # if UserQuery.new.email("me@example.com").none?
-    #   SignUpUser.create!(email: "me@example.com", password: "test123", password_confirmation: "test123")
-    # end
-    # ```
+      10.times do
+        FortuneFactory.create do |fortune|
+          fortune.text("#{user.email} have a Lucky day!")
+          fortune.user_id(user.id)
+        end
+      end
+    end
     puts "Done adding sample data"
   end
 end
