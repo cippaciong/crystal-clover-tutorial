@@ -5,14 +5,9 @@ class Home::Index < BrowserAction
     if current_user?
       redirect Me::Show
     else
-      # When you're ready change this line to:
-      #
-      #   redirect SignIns::New
-      #
-      # Or maybe show signed out users a marketing page:
-      #
-      #   html Marketing::IndexPage
-      html Home::IndexPage
+      latest_fortunes = FortuneQuery.new.created_at.desc_order.limit(10)
+
+      html Home::IndexPage, fortunes: latest_fortunes
     end
   end
 end
